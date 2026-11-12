@@ -170,6 +170,7 @@
             <th>Gemini Spark</th>
             <th>OpenClaw</th>
             <th>Hermes</th>
+            <th>Orc</th>
             <th>Blue Phone</th>
           </tr>
         </thead>
@@ -186,7 +187,7 @@
 </footer>
 
 <script>
-const agents = ["ChatGPT Dots", "Claude Duet", "GrokBot", "Muse", "Gemini Spark", "OpenClaw", "Hermes", "Blue Phone"];
+const agents = ["ChatGPT Dots", "Claude Duet", "GrokBot", "Muse", "Gemini Spark", "OpenClaw", "Hermes", "Orc", "Blue Phone"];
 
 const capabilities = [
   {
@@ -200,6 +201,7 @@ const capabilities = [
       "Gemini Spark": { level: "no", note: "Cloud + Workspace." },
       "OpenClaw": { level: "partial", note: "Local machine if granted." },
       "Hermes": { level: "partial", note: "Local/self-hosted; depends on setup." },
+      "Orc": { level: "no", note: "Desktop/mobile orchestration for coding agents. No native phone OS control." },
       "Blue Phone": { level: "yes", note: "Blue OS on Pixel. Full native app control + 2FA." }
     }
   },
@@ -214,6 +216,7 @@ const capabilities = [
       "Gemini Spark": { level: "yes", note: "Cloud computer + local files." },
       "OpenClaw": { level: "yes", note: "Full local machine." },
       "Hermes": { level: "yes", note: "Full local or VPS control." },
+      "Orc": { level: "yes", note: "Orchestrates multiple coding agents locally or in cloud with worktrees." },
       "Blue Phone": { level: "partial", note: "Primarily phone; desktop coming." }
     }
   },
@@ -228,6 +231,7 @@ const capabilities = [
       "Gemini Spark": { level: "partial", note: "Asks before sign-ins." },
       "OpenClaw": { level: "yes", note: "Local; user can grant full auto." },
       "Hermes": { level: "yes", note: "Local; user controls permissions." },
+      "Orc": { level: "partial", note: "Browser password manager in recent versions; user-controlled." },
       "Blue Phone": { level: "yes", note: "Secure Vault. Auto passwords + OTP." }
     }
   },
@@ -242,6 +246,7 @@ const capabilities = [
       "Gemini Spark": { level: "yes", note: "Workspace + personal context." },
       "OpenClaw": { level: "yes", note: "Local MEMORY.md + notes." },
       "Hermes": { level: "yes", note: "Persistent memory + self-written skills." },
+      "Orc": { level: "partial", note: "Per-agent worktree context; no long-term personal memory layer." },
       "Blue Phone": { level: "yes", note: "People, preferences, history from day one." }
     }
   },
@@ -256,6 +261,7 @@ const capabilities = [
       "Gemini Spark": { level: "yes", note: "24/7 background tasks." },
       "OpenClaw": { level: "yes", note: "Heartbeat and scheduled jobs." },
       "Hermes": { level: "yes", note: "Always-on with cron and learning loop." },
+      "Orc": { level: "partial", note: "Can run agents in background; primarily interactive orchestration." },
       "Blue Phone": { level: "yes", note: "Background agents and triage." }
     }
   },
@@ -270,6 +276,7 @@ const capabilities = [
       "Gemini Spark": { level: "yes", note: "Deep Gmail integration." },
       "OpenClaw": { level: "partial", note: "Depends on skills." },
       "Hermes": { level: "partial", note: "Email channel + skills." },
+      "Orc": { level: "no", note: "Focused on coding agents, not personal email." },
       "Blue Phone": { level: "yes", note: "Full triage and replies." }
     }
   },
@@ -284,6 +291,7 @@ const capabilities = [
       "Gemini Spark": { level: "no" },
       "OpenClaw": { level: "yes", note: "iMessage, WhatsApp, Signal, Telegram, etc." },
       "Hermes": { level: "yes", note: "Telegram, WhatsApp, Signal, Slack, and more." },
+      "Orc": { level: "no" },
       "Blue Phone": { level: "yes", note: "Full Messages access." }
     }
   },
@@ -298,6 +306,7 @@ const capabilities = [
       "Gemini Spark": { level: "no" },
       "OpenClaw": { level: "partial", note: "Possible via skills." },
       "Hermes": { level: "partial", note: "Possible via skills/integrations." },
+      "Orc": { level: "no" },
       "Blue Phone": { level: "coming", note: "Call features listed as coming soon." }
     }
   },
@@ -312,6 +321,7 @@ const capabilities = [
       "Gemini Spark": { level: "partial", note: "Maps / Workspace." },
       "OpenClaw": { level: "partial", note: "If granted locally." },
       "Hermes": { level: "partial", note: "If granted locally." },
+      "Orc": { level: "no" },
       "Blue Phone": { level: "yes", note: "Device-level location." }
     }
   },
@@ -326,6 +336,7 @@ const capabilities = [
       "Gemini Spark": { level: "partial", note: "Asks before purchases." },
       "OpenClaw": { level: "partial", note: "Depends on setup." },
       "Hermes": { level: "partial", note: "Depends on skills." },
+      "Orc": { level: "no" },
       "Blue Phone": { level: "yes", note: "Can spend via apps." }
     }
   },
@@ -340,6 +351,7 @@ const capabilities = [
       "Gemini Spark": { level: "partial", note: "Browser with approval." },
       "OpenClaw": { level: "partial", note: "Browser or skills." },
       "Hermes": { level: "partial", note: "Browser or skills." },
+      "Orc": { level: "no" },
       "Blue Phone": { level: "yes", note: "Demonstrated Amazon and other apps." }
     }
   },
@@ -354,6 +366,7 @@ const capabilities = [
       "Gemini Spark": { level: "unknown" },
       "OpenClaw": { level: "partial", note: "Shared sessions." },
       "Hermes": { level: "partial", note: "Bot Mode and group chats." },
+      "Orc": { level: "yes", note: "Core feature: run fleets of agents in parallel with isolated worktrees." },
       "Blue Phone": { level: "unknown" }
     }
   },
@@ -368,6 +381,7 @@ const capabilities = [
       "Gemini Spark": { level: "no" },
       "OpenClaw": { level: "yes", note: "Open source, local-first, model-agnostic." },
       "Hermes": { level: "yes", note: "MIT open source, model-agnostic, self-improving." },
+      "Orc": { level: "yes", note: "Open source (Stably AI). Model-agnostic orchestrator." },
       "Blue Phone": { level: "no" }
     }
   },
@@ -382,6 +396,7 @@ const capabilities = [
       "Gemini Spark": { level: "yes", note: "Drive + local." },
       "OpenClaw": { level: "yes", note: "Full local filesystem." },
       "Hermes": { level: "yes", note: "Full local or VPS files." },
+      "Orc": { level: "yes", note: "Full local filesystem + git worktrees per agent." },
       "Blue Phone": { level: "partial", note: "Device files + cloud." }
     }
   },
@@ -396,6 +411,7 @@ const capabilities = [
       "Gemini Spark": { level: "yes", note: "Cloud browser." },
       "OpenClaw": { level: "yes", note: "Local browser control." },
       "Hermes": { level: "yes", note: "Browser tools." },
+      "Orc": { level: "yes", note: "Built-in browser for agent feedback and testing." },
       "Blue Phone": { level: "yes", note: "Full app and browser control." }
     }
   },
@@ -410,6 +426,7 @@ const capabilities = [
       "Gemini Spark": { level: "partial", note: "Voice and some visual." },
       "OpenClaw": { level: "partial", note: "Depends on local permissions." },
       "Hermes": { level: "partial", note: "Depends on local permissions." },
+      "Orc": { level: "no" },
       "Blue Phone": { level: "yes", note: "Full device hardware access." }
     }
   },
@@ -424,6 +441,7 @@ const capabilities = [
       "Gemini Spark": { level: "partial", note: "Workspace + browser." },
       "OpenClaw": { level: "partial", note: "Depends on user setup." },
       "Hermes": { level: "partial", note: "Depends on skills and setup." },
+      "Orc": { level: "no" },
       "Blue Phone": { level: "partial", note: "Can use any installed app." }
     }
   },
@@ -438,6 +456,7 @@ const capabilities = [
       "Gemini Spark": { level: "yes", note: "Proactive Workspace help." },
       "OpenClaw": { level: "partial", note: "Depends on user skills." },
       "Hermes": { level: "yes", note: "Self-improving learning loop." },
+      "Orc": { level: "partial", note: "Orchestrates agents but does not proactively manage personal life." },
       "Blue Phone": { level: "yes", note: "Notification triage and handling." }
     }
   }
