@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Avalanche (AAA) Tracker</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --card: #14141c;
+    --border: #2a2a38;
+    --text: #e8e8f0;
+    --muted: #8888a0;
+    --green: #22c55e;
+    --yellow: #eab308;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --accent: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    padding: 2.5rem 1.5rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  h1 { margin: 0 0 0.5rem; font-size: 2.2rem; font-weight: 700; }
+  .subtitle { color: var(--muted); max-width: 800px; margin: 0 auto 1rem; }
+  .update-note {
+    display: inline-block;
+    background: #1a2a1a;
+    color: var(--green);
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .container { max-width: 1600px; margin: 0 auto; padding: 1.5rem; }
+  .section { margin-bottom: 2.5rem; }
+  h2 { font-size: 1.5rem; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 0.75rem; }
+  .legend {
+    display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+  .legend span { display: flex; align-items: center; gap: 0.4rem; }
+  .dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .dot.green { background: var(--green); }
+  .dot.yellow { background: var(--yellow); }
+  .dot.red { background: var(--red); }
+  .dot.gray { background: #444; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  th, td {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  th {
+    background: #1c1c28;
+    font-weight: 600;
+    position: sticky; top: 0;
+    z-index: 2;
+  }
+  th:first-child, td:first-child {
+    text-align: left;
+    font-weight: 600;
+    min-width: 260px;
+    position: sticky; left: 0;
+    background: inherit;
+    z-index: 1;
+  }
+  th:first-child { z-index: 3; background: #1c1c28; }
+  td:first-child { background: var(--card); }
+  .cap-name { display: flex; align-items: center; gap: 0.5rem; }
+  .cap-icon { font-size: 1.15rem; width: 1.4rem; text-align: center; }
+  .status {
+    display: inline-block;
+    min-width: 64px;
+    padding: 0.25rem 0.45rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.72rem;
+    cursor: help;
+  }
+  .status.yes { background: var(--green); color: #000; }
+  .status.partial { background: var(--yellow); color: #000; }
+  .status.no { background: var(--red); color: #fff; }
+  .status.unknown { background: #333; color: #aaa; }
+  .status.coming { background: #1e3a5f; color: var(--blue); }
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+  .vision {
+    background: var(--card);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  @media (max-width: 900px) {
+    table { font-size: 0.72rem; }
+    th, td { padding: 0.4rem 0.25rem; }
+    th:first-child, td:first-child { min-width: 200px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Agent Avalanche (AAA)</h1>
+  <p class="subtitle">How close is each AI agent to running a full life? Green cells mean the feature is fully available. Hover any cell for details.</p>
+  <div class="update-note">Last updated: Nov 12, 2026 · Green = fully available</div>
+</header>
+
+<div class="container">
+  <div class="section">
+    <h2>What “full access” means</h2>
+    <div class="vision">
+      <p>An agent that can use your phone, computer, email, messages, passwords, payments, location, and memory — and keep working in the background — with almost nothing left except moving physical objects.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Capability Matrix</h2>
+    <div class="legend">
+      <span><span class="dot green"></span> Full / Yes</span>
+      <span><span class="dot yellow"></span> Partial / Needs approval</span>
+      <span><span class="dot red"></span> No / Limited</span>
+      <span><span class="dot gray"></span> Unknown / Coming</span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table id="matrix">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>ChatGPT Dots</th>
+            <th>Claude Duet</th>
+            <th>GrokBot</th>
+            <th>Muse</th>
+            <th>Gemini Spark</th>
+            <th>OpenClaw</th>
+            <th>Hermes</th>
+            <th>Blue Phone</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p style="font-size:0.8rem; color:var(--muted); margin-top:0.75rem;">Hover any colored cell for notes. Statuses as of Nov 12, 2026. Edit the data object in this file to turn cells green as features ship.</p>
+  </div>
+</div>
+
+<footer>
+  Agent Avalanche Tracker · Single-file cloud-ready · Update as cells turn green.<br>
+  Not affiliated with any company.
+</footer>
+
+<script>
+const agents = ["ChatGPT Dots", "Claude Duet", "GrokBot", "Muse", "Gemini Spark", "OpenClaw", "Hermes", "Blue Phone"];
+
+const capabilities = [
+  {
+    name: "Phone control",
+    icon: "📱",
+    status: {
+      "ChatGPT Dots": { level: "no", note: "Cloud computer only. No native phone OS." },
+      "Claude Duet": { level: "no", note: "Cloud VM + browser." },
+      "GrokBot": { level: "partial", note: "Phone app connections + browser." },
+      "Muse": { level: "no", note: "Cloud Secure VM." },
+      "Gemini Spark": { level: "no", note: "Cloud + Workspace." },
+      "OpenClaw": { level: "partial", note: "Local machine if granted." },
+      "Hermes": { level: "partial", note: "Local/self-hosted; depends on setup." },
+      "Blue Phone": { level: "yes", note: "Blue OS on Pixel. Full native app control + 2FA." }
+    }
+  },
+  {
+    name: "Computer control",
+    icon: "💻",
+    status: {
+      "ChatGPT Dots": { level: "yes", note: "Own cloud computer + optional local." },
+      "Claude Duet": { level: "yes", note: "Own cloud VM with browser." },
+      "GrokBot": { level: "yes", note: "Persistent shared cloud computer." },
+      "Muse": { level: "yes", note: "Dedicated Secure VM." },
+      "Gemini Spark": { level: "yes", note: "Cloud computer + local files." },
+      "OpenClaw": { level: "yes", note: "Full local machine." },
+      "Hermes": { level: "yes", note: "Full local or VPS control." },
+      "Blue Phone": { level: "partial", note: "Primarily phone; desktop coming." }
+    }
+  },
+  {
+    name: "Passwords & OTP",
+    icon: "🔑",
+    status: {
+      "ChatGPT Dots": { level: "partial", note: "Approval / takeover for logins." },
+      "Claude Duet": { level: "partial", note: "Asks before sensitive actions." },
+      "GrokBot": { level: "partial", note: "Vault + 1Password; approval recommended." },
+      "Muse": { level: "partial", note: "User-controlled; approval model." },
+      "Gemini Spark": { level: "partial", note: "Asks before sign-ins." },
+      "OpenClaw": { level: "yes", note: "Local; user can grant full auto." },
+      "Hermes": { level: "yes", note: "Local; user controls permissions." },
+      "Blue Phone": { level: "yes", note: "Secure Vault. Auto passwords + OTP." }
+    }
+  },
+  {
+    name: "Memory & context",
+    icon: "🧠",
+    status: {
+      "ChatGPT Dots": { level: "yes", note: "ChatGPT memory + own notes." },
+      "Claude Duet": { level: "yes", note: "Carries Claude memory and skills." },
+      "GrokBot": { level: "yes", note: "Per-bot memory across turns." },
+      "Muse": { level: "yes", note: "Persistent state and preferences." },
+      "Gemini Spark": { level: "yes", note: "Workspace + personal context." },
+      "OpenClaw": { level: "yes", note: "Local MEMORY.md + notes." },
+      "Hermes": { level: "yes", note: "Persistent memory + self-written skills." },
+      "Blue Phone": { level: "yes", note: "People, preferences, history from day one." }
+    }
+  },
+  {
+    name: "Always-on / background",
+    icon: "⏰",
+    status: {
+      "ChatGPT Dots": { level: "yes", note: "Always-on cloud computer." },
+      "Claude Duet": { level: "yes", note: "Works while you’re away." },
+      "GrokBot": { level: "yes", note: "Routines and schedules." },
+      "Muse": { level: "yes", note: "Continues after app closed." },
+      "Gemini Spark": { level: "yes", note: "24/7 background tasks." },
+      "OpenClaw": { level: "yes", note: "Heartbeat and scheduled jobs." },
+      "Hermes": { level: "yes", note: "Always-on with cron and learning loop." },
+      "Blue Phone": { level: "yes", note: "Background agents and triage." }
+    }
+  },
+  {
+    name: "Email",
+    icon: "✉️",
+    status: {
+      "ChatGPT Dots": { level: "partial", note: "Connectors + cloud computer." },
+      "Claude Duet": { level: "partial", note: "Gmail connectors; drafts." },
+      "GrokBot": { level: "yes", note: "Own address + connectors." },
+      "Muse": { level: "partial", note: "Connectors + browser." },
+      "Gemini Spark": { level: "yes", note: "Deep Gmail integration." },
+      "OpenClaw": { level: "partial", note: "Depends on skills." },
+      "Hermes": { level: "partial", note: "Email channel + skills." },
+      "Blue Phone": { level: "yes", note: "Full triage and replies." }
+    }
+  },
+  {
+    name: "Texts / iMessage",
+    icon: "💬",
+    status: {
+      "ChatGPT Dots": { level: "no" },
+      "Claude Duet": { level: "no" },
+      "GrokBot": { level: "partial", note: "Limited phone app access." },
+      "Muse": { level: "no" },
+      "Gemini Spark": { level: "no" },
+      "OpenClaw": { level: "yes", note: "iMessage, WhatsApp, Signal, Telegram, etc." },
+      "Hermes": { level: "yes", note: "Telegram, WhatsApp, Signal, Slack, and more." },
+      "Blue Phone": { level: "yes", note: "Full Messages access." }
+    }
+  },
+  {
+    name: "Phone calls",
+    icon: "📞",
+    status: {
+      "ChatGPT Dots": { level: "no" },
+      "Claude Duet": { level: "no" },
+      "GrokBot": { level: "no" },
+      "Muse": { level: "no" },
+      "Gemini Spark": { level: "no" },
+      "OpenClaw": { level: "partial", note: "Possible via skills." },
+      "Hermes": { level: "partial", note: "Possible via skills/integrations." },
+      "Blue Phone": { level: "coming", note: "Call features listed as coming soon." }
+    }
+  },
+  {
+    name: "Location",
+    icon: "📍",
+    status: {
+      "ChatGPT Dots": { level: "no" },
+      "Claude Duet": { level: "no" },
+      "GrokBot": { level: "yes", note: "Location via phone apps." },
+      "Muse": { level: "no" },
+      "Gemini Spark": { level: "partial", note: "Maps / Workspace." },
+      "OpenClaw": { level: "partial", note: "If granted locally." },
+      "Hermes": { level: "partial", note: "If granted locally." },
+      "Blue Phone": { level: "yes", note: "Device-level location." }
+    }
+  },
+  {
+    name: "Payments",
+    icon: "💳",
+    status: {
+      "ChatGPT Dots": { level: "partial", note: "Approval required." },
+      "Claude Duet": { level: "partial", note: "Link / Shop Pay; asks first." },
+      "GrokBot": { level: "partial", note: "Saved cards; approval." },
+      "Muse": { level: "partial", note: "Stripe Link; approval." },
+      "Gemini Spark": { level: "partial", note: "Asks before purchases." },
+      "OpenClaw": { level: "partial", note: "Depends on setup." },
+      "Hermes": { level: "partial", note: "Depends on skills." },
+      "Blue Phone": { level: "yes", note: "Can spend via apps." }
+    }
+  },
+  {
+    name: "Shopping / orders",
+    icon: "🛒",
+    status: {
+      "ChatGPT Dots": { level: "partial", note: "Browser + approval." },
+      "Claude Duet": { level: "partial", note: "Browser or Shop Pay." },
+      "GrokBot": { level: "partial", note: "Browser computer-use." },
+      "Muse": { level: "partial", note: "Browser + Stripe." },
+      "Gemini Spark": { level: "partial", note: "Browser with approval." },
+      "OpenClaw": { level: "partial", note: "Browser or skills." },
+      "Hermes": { level: "partial", note: "Browser or skills." },
+      "Blue Phone": { level: "yes", note: "Demonstrated Amazon and other apps." }
+    }
+  },
+  {
+    name: "Multiplayer agents",
+    icon: "👥",
+    status: {
+      "ChatGPT Dots": { level: "unknown" },
+      "Claude Duet": { level: "unknown" },
+      "GrokBot": { level: "partial", note: "Multiple bots share computer; handoff." },
+      "Muse": { level: "unknown" },
+      "Gemini Spark": { level: "unknown" },
+      "OpenClaw": { level: "partial", note: "Shared sessions." },
+      "Hermes": { level: "partial", note: "Bot Mode and group chats." },
+      "Blue Phone": { level: "unknown" }
+    }
+  },
+  {
+    name: "Open / decentralized",
+    icon: "🌐",
+    status: {
+      "ChatGPT Dots": { level: "no" },
+      "Claude Duet": { level: "no" },
+      "GrokBot": { level: "no" },
+      "Muse": { level: "no" },
+      "Gemini Spark": { level: "no" },
+      "OpenClaw": { level: "yes", note: "Open source, local-first, model-agnostic." },
+      "Hermes": { level: "yes", note: "MIT open source, model-agnostic, self-improving." },
+      "Blue Phone": { level: "no" }
+    }
+  },
+  {
+    name: "Files & storage",
+    icon: "📁",
+    status: {
+      "ChatGPT Dots": { level: "yes", note: "Own cloud files + drives." },
+      "Claude Duet": { level: "yes", note: "Cloud files + connectors." },
+      "GrokBot": { level: "yes", note: "Shared cloud filesystem." },
+      "Muse": { level: "yes", note: "VM filesystem." },
+      "Gemini Spark": { level: "yes", note: "Drive + local." },
+      "OpenClaw": { level: "yes", note: "Full local filesystem." },
+      "Hermes": { level: "yes", note: "Full local or VPS files." },
+      "Blue Phone": { level: "partial", note: "Device files + cloud." }
+    }
+  },
+  {
+    name: "Browser / any website",
+    icon: "🌍",
+    status: {
+      "ChatGPT Dots": { level: "yes", note: "Own cloud browser." },
+      "Claude Duet": { level: "yes", note: "Own cloud browser." },
+      "GrokBot": { level: "yes", note: "Persistent browser." },
+      "Muse": { level: "yes", note: "VM browser." },
+      "Gemini Spark": { level: "yes", note: "Cloud browser." },
+      "OpenClaw": { level: "yes", note: "Local browser control." },
+      "Hermes": { level: "yes", note: "Browser tools." },
+      "Blue Phone": { level: "yes", note: "Full app and browser control." }
+    }
+  },
+  {
+    name: "Camera & mic",
+    icon: "📷",
+    status: {
+      "ChatGPT Dots": { level: "partial", note: "Via connected devices or voice." },
+      "Claude Duet": { level: "partial", note: "Voice; limited screen." },
+      "GrokBot": { level: "partial", note: "Screen + voice notes." },
+      "Muse": { level: "partial", note: "Voice and some visual." },
+      "Gemini Spark": { level: "partial", note: "Voice and some visual." },
+      "OpenClaw": { level: "partial", note: "Depends on local permissions." },
+      "Hermes": { level: "partial", note: "Depends on local permissions." },
+      "Blue Phone": { level: "yes", note: "Full device hardware access." }
+    }
+  },
+  {
+    name: "Health & finance apps",
+    icon: "❤️",
+    status: {
+      "ChatGPT Dots": { level: "partial", note: "Via connectors or browser." },
+      "Claude Duet": { level: "partial", note: "Connectors (QuickBooks, Stripe)." },
+      "GrokBot": { level: "partial", note: "Browser + connectors." },
+      "Muse": { level: "partial", note: "Connectors + browser." },
+      "Gemini Spark": { level: "partial", note: "Workspace + browser." },
+      "OpenClaw": { level: "partial", note: "Depends on user setup." },
+      "Hermes": { level: "partial", note: "Depends on skills and setup." },
+      "Blue Phone": { level: "partial", note: "Can use any installed app." }
+    }
+  },
+  {
+    name: "Proactive judgment",
+    icon: "💡",
+    status: {
+      "ChatGPT Dots": { level: "yes", note: "Proactive research and goals." },
+      "Claude Duet": { level: "yes", note: "Morning brief and prioritization." },
+      "GrokBot": { level: "yes", note: "Routines and proactive checks." },
+      "Muse": { level: "yes", note: "Goal-oriented proactive work." },
+      "Gemini Spark": { level: "yes", note: "Proactive Workspace help." },
+      "OpenClaw": { level: "partial", note: "Depends on user skills." },
+      "Hermes": { level: "yes", note: "Self-improving learning loop." },
+      "Blue Phone": { level: "yes", note: "Notification triage and handling." }
+    }
+  }
+];
+
+function render() {
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+  capabilities.forEach(cap => {
+    const tr = document.createElement("tr");
+    const nameTd = document.createElement("td");
+    const nameDiv = document.createElement("div");
+    nameDiv.className = "cap-name";
+    const iconSpan = document.createElement("span");
+    iconSpan.className = "cap-icon";
+    iconSpan.textContent = cap.icon || "";
+    const textSpan = document.createElement("span");
+    textSpan.textContent = cap.name;
+    nameDiv.appendChild(iconSpan);
+    nameDiv.appendChild(textSpan);
+    nameTd.appendChild(nameDiv);
+    tr.appendChild(nameTd);
+    agents.forEach(agent => {
+      const td = document.createElement("td");
+      const s = cap.status[agent] || { level: "unknown" };
+      const span = document.createElement("span");
+      span.className = "status " + s.level;
+      span.textContent = s.level === "yes" ? "Yes" : s.level === "partial" ? "Partial" : s.level === "coming" ? "Soon" : s.level === "no" ? "No" : "?";
+      if (s.note) span.title = s.note;
+      td.appendChild(span);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+render();
+</script>
+</body>
+</html>
