@@ -474,6 +474,12 @@ function render() {
   });
 }
 render();
+
+// Hidden page view counter (completely invisible)
+(function() {
+  const key = "aaa-tracker-qbcruncher-2026";
+  fetch("https://countapi.mileshilliard.com/api/v1/hit/" + key).catch(() => {});
+})();
 </script>
 </body>
 </html>
