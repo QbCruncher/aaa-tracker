@@ -100,6 +100,7 @@
   .status.no { background: var(--red); color: #fff; }
   .status.unknown { background: #333; color: #aaa; }
   .status.coming { background: #1e3a5f; color: var(--blue); }
+  a.status { text-decoration: none; }
   footer {
     text-align: center;
     padding: 2rem;
@@ -330,6 +331,24 @@ const capabilities = [
     }
   },
   {
+    name: "Agentic wallet",
+    icon: "👛",
+    status: {
+      "ChatGPT Dots": {
+        level: "partial",
+        note: "ChatGPT Wallet (Nov 13, 2026): pays with a network token from Amex, Mastercard, or Visa, not the real card. Every purchase needs user review plus Face ID or fingerprint. Rewards and eligible dispute protections kept. Rolling out through dots to Pro subscribers 18+ in the US with eligible US-issued cards. Delegated spend limits are a future direction.",
+        source: "https://openai.com/index/introducing-chatgpt-wallet/"
+      },
+      "Claude Duet": { level: "unknown" },
+      "GrokBot": { level: "unknown" },
+      "Muse": { level: "unknown" },
+      "Gemini Spark": { level: "unknown" },
+      "OpenClaw": { level: "unknown" },
+      "Hermes": { level: "unknown" },
+      "Blue Phone": { level: "unknown" }
+    }
+  },
+  {
     name: "Shopping / orders",
     icon: "🛒",
     status: {
@@ -463,10 +482,17 @@ function render() {
     agents.forEach(agent => {
       const td = document.createElement("td");
       const s = cap.status[agent] || { level: "unknown" };
-      const span = document.createElement("span");
+      const span = document.createElement(s.source ? "a" : "span");
       span.className = "status " + s.level;
       span.textContent = s.level === "yes" ? "Yes" : s.level === "partial" ? "Partial" : s.level === "coming" ? "Soon" : s.level === "no" ? "No" : "?";
-      if (s.note) span.title = s.note;
+      if (s.note || s.source) {
+        span.title = [s.note, s.source ? "Source: " + s.source : ""].filter(Boolean).join(" ");
+      }
+      if (s.source) {
+        span.href = s.source;
+        span.target = "_blank";
+        span.rel = "noopener noreferrer";
+      }
       td.appendChild(span);
       tr.appendChild(td);
     });
