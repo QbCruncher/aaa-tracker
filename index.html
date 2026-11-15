@@ -93,7 +93,18 @@
     border-radius: 6px;
     font-weight: 600;
     font-size: 0.72rem;
-    cursor: help;
+    cursor: default;
+    border: none;
+    font-family: inherit;
+    line-height: 1.2;
+    vertical-align: middle;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .status.has-detail { cursor: pointer; }
+  .status:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
   .status.yes { background: var(--green); color: #000; }
   .status.partial { background: var(--yellow); color: #000; }
@@ -101,6 +112,62 @@
   .status.unknown { background: #333; color: #aaa; }
   .status.coming { background: #1e3a5f; color: var(--blue); }
   a.status { text-decoration: none; }
+
+  .popover {
+    position: fixed;
+    z-index: 40;
+    width: min(300px, calc(100vw - 16px));
+    max-height: min(70vh, 420px);
+    overflow-y: auto;
+    background: #1c1c28;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem 0.45rem;
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+    white-space: normal;
+  }
+  .popover[hidden] { display: none !important; }
+  .popover::before,
+  .popover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 16px;
+  }
+  .popover::before { top: -16px; }
+  .popover::after { bottom: -16px; }
+  .popover .note { margin: 0; }
+  .popover .added {
+    margin: 0.45rem 0 0;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 0.72rem;
+  }
+  .popover a.source {
+    display: flex;
+    align-items: center;
+    margin: 0.55rem -0.15rem 0;
+    padding: 0.7rem 0.15rem 0.35rem;
+    border-top: 1px solid var(--border);
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    min-height: 44px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+  }
+  .popover a.source:hover,
+  .popover a.source:focus-visible {
+    color: #93c5fd;
+  }
 
   /* Just Added indicator */
   .status.just-added {
@@ -202,7 +269,7 @@
         <tbody id="tbody"></tbody>
       </table>
     </div>
-    <p style="font-size:0.8rem; color:var(--muted); margin-top:0.75rem;">Hover any colored cell for notes. Cells with a green glow and “NEW” badge improved recently (red→yellow, red→green, or yellow→green). Statuses as of Nov 15, 2026. Edit the data object in this file to turn cells green as features ship.</p>
+    <p style="font-size:0.8rem; color:var(--muted); margin-top:0.75rem;">Hover a colored cell to read its note. Tap the cell to keep the note open, including on a phone, and tap outside it to dismiss it. Green and yellow cells include a link to an official source. Cells with a green glow and “NEW” badge improved recently (red→yellow, red→green, or yellow→green). Statuses as of Nov 15, 2026. Edit the data object in this file to turn cells green as features ship.</p>
   </div>
 </div>
 
@@ -221,82 +288,82 @@ const capabilities = [
     status: {
       "ChatGPT Dots": { level: "no", note: "Cloud computer only. No native phone OS." },
       "Claude Duet": { level: "no", note: "Cloud VM + browser." },
-      "GrokBot": { level: "partial", note: "Phone app connections + browser." },
+      "GrokBot": { level: "partial", note: "Phone app connections + browser.", source: "https://docs.x.ai/grok-bot/mobile" },
       "Muse": { level: "no", note: "Cloud Secure VM." },
       "Gemini Spark": { level: "no", note: "Cloud + Workspace." },
-      "OpenClaw": { level: "partial", note: "Local machine if granted." },
-      "Hermes": { level: "partial", note: "Local/self-hosted; depends on setup." },
-      "Blue Phone": { level: "yes", note: "Blue OS on Pixel. Full native app control + 2FA." }
+      "OpenClaw": { level: "partial", note: "Local machine if granted.", source: "https://docs.openclaw.ai/nodes/command-policy" },
+      "Hermes": { level: "partial", note: "Local/self-hosted; depends on setup.", source: "https://hermes-agent.nousresearch.com/marketplace/hermes-android" },
+      "Blue Phone": { level: "yes", note: "Blue OS on Pixel. Full native app control + 2FA.", source: "https://heyblue.com/" }
     }
   },
   {
     name: "Computer control",
     icon: "💻",
     status: {
-      "ChatGPT Dots": { level: "yes", note: "Own cloud computer + optional local." },
-      "Claude Duet": { level: "yes", note: "Own cloud VM with browser." },
-      "GrokBot": { level: "yes", note: "Persistent shared cloud computer." },
-      "Muse": { level: "yes", note: "Dedicated Secure VM." },
-      "Gemini Spark": { level: "yes", note: "Cloud computer + local files." },
-      "OpenClaw": { level: "yes", note: "Full local machine." },
-      "Hermes": { level: "yes", note: "Full local or VPS control." },
-      "Blue Phone": { level: "partial", note: "Primarily phone; desktop coming." }
+      "ChatGPT Dots": { level: "yes", note: "Own cloud computer + optional local.", source: "https://learn.chatgpt.com/docs/dots/computers-and-apps" },
+      "Claude Duet": { level: "yes", note: "Own cloud VM with browser.", source: "https://claude.com/resources/articles/claude-duet-safety-privacy-and-security" },
+      "GrokBot": { level: "yes", note: "Persistent shared cloud computer.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
+      "Muse": { level: "yes", note: "Dedicated Secure VM.", source: "https://muse.ai/security-and-privacy" },
+      "Gemini Spark": { level: "yes", note: "Cloud computer + local files.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "yes", note: "Full local machine.", source: "https://openclaw.ai/" },
+      "Hermes": { level: "yes", note: "Full local or VPS control.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tools" },
+      "Blue Phone": { level: "partial", note: "Primarily phone; desktop coming.", source: "https://heyblue.com/" }
     }
   },
   {
     name: "Passwords & OTP",
     icon: "🔑",
     status: {
-      "ChatGPT Dots": { level: "partial", note: "Approval / takeover for logins." },
-      "Claude Duet": { level: "partial", note: "Asks before sensitive actions." },
-      "GrokBot": { level: "partial", note: "Vault + 1Password; approval recommended." },
-      "Muse": { level: "partial", note: "User-controlled; approval model." },
-      "Gemini Spark": { level: "partial", note: "Asks before sign-ins." },
-      "OpenClaw": { level: "yes", note: "Local; user can grant full auto." },
-      "Hermes": { level: "yes", note: "Local; user controls permissions." },
-      "Blue Phone": { level: "yes", note: "Secure Vault. Auto passwords + OTP." }
+      "ChatGPT Dots": { level: "partial", note: "Approval / takeover for logins.", source: "https://help.openai.com/en/articles/20001529-dots-privacy-security-and-safety-faqs" },
+      "Claude Duet": { level: "partial", note: "Asks before sensitive actions.", source: "https://claude.com/resources/articles/claude-duet-safety-privacy-and-security" },
+      "GrokBot": { level: "partial", note: "Vault + 1Password; approval recommended.", source: "https://docs.x.ai/grok-bot/vault" },
+      "Muse": { level: "partial", note: "User-controlled; approval model.", source: "https://muse.ai/security-and-privacy" },
+      "Gemini Spark": { level: "partial", note: "Asks before sign-ins.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "yes", note: "Local; user can grant full auto.", source: "https://docs.openclaw.ai/tools/exec-approvals" },
+      "Hermes": { level: "yes", note: "Local; user controls permissions.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/credential-vault" },
+      "Blue Phone": { level: "yes", note: "Secure Vault. Auto passwords + OTP.", source: "https://heyblue.com/privacy" }
     }
   },
   {
     name: "Memory & context",
     icon: "🧠",
     status: {
-      "ChatGPT Dots": { level: "yes", note: "ChatGPT memory + own notes." },
-      "Claude Duet": { level: "yes", note: "Carries Claude memory and skills." },
-      "GrokBot": { level: "yes", note: "Per-bot memory across turns." },
-      "Muse": { level: "yes", note: "Persistent state and preferences." },
-      "Gemini Spark": { level: "yes", note: "Workspace + personal context." },
-      "OpenClaw": { level: "yes", note: "Local MEMORY.md + notes." },
-      "Hermes": { level: "yes", note: "Persistent memory + self-written skills." },
-      "Blue Phone": { level: "yes", note: "People, preferences, history from day one." }
+      "ChatGPT Dots": { level: "yes", note: "ChatGPT memory + own notes.", source: "https://learn.chatgpt.com/docs/dots" },
+      "Claude Duet": { level: "yes", note: "Carries Claude memory and skills.", source: "https://support.claude.com/en/articles/17631495-get-started-with-claude-duet" },
+      "GrokBot": { level: "yes", note: "Per-bot memory across turns.", source: "https://docs.x.ai/grok-bot/bots" },
+      "Muse": { level: "yes", note: "Persistent state and preferences.", source: "https://muse.ai/privacy" },
+      "Gemini Spark": { level: "yes", note: "Workspace + personal context.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "yes", note: "Local MEMORY.md + notes.", source: "https://docs.openclaw.ai/concepts/memory" },
+      "Hermes": { level: "yes", note: "Persistent memory + self-written skills.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/memory" },
+      "Blue Phone": { level: "yes", note: "People, preferences, history from day one.", source: "https://heyblue.com/" }
     }
   },
   {
     name: "Always-on / background",
     icon: "⏰",
     status: {
-      "ChatGPT Dots": { level: "yes", note: "Always-on cloud computer." },
-      "Claude Duet": { level: "yes", note: "Works while you’re away." },
-      "GrokBot": { level: "yes", note: "Routines and schedules." },
-      "Muse": { level: "yes", note: "Continues after app closed." },
-      "Gemini Spark": { level: "yes", note: "24/7 background tasks." },
-      "OpenClaw": { level: "yes", note: "Heartbeat and scheduled jobs." },
-      "Hermes": { level: "yes", note: "Always-on with cron and learning loop." },
-      "Blue Phone": { level: "yes", note: "Background agents and triage." }
+      "ChatGPT Dots": { level: "yes", note: "Always-on cloud computer.", source: "https://openai.com/index/introducing-dots/" },
+      "Claude Duet": { level: "yes", note: "Works while you’re away.", source: "https://support.claude.com/en/articles/17631495-get-started-with-claude-duet" },
+      "GrokBot": { level: "yes", note: "Routines and schedules.", source: "https://docs.x.ai/grok-bot/skills-routines-and-automations" },
+      "Muse": { level: "yes", note: "Continues after app closed.", source: "https://muse.ai/blog/how-we-designed-muse" },
+      "Gemini Spark": { level: "yes", note: "24/7 background tasks.", source: "https://blog.google/innovation-and-ai/products/gemini-app/next-evolution-gemini-app/" },
+      "OpenClaw": { level: "yes", note: "Heartbeat and scheduled jobs.", source: "https://docs.openclaw.ai/cron-vs-heartbeat" },
+      "Hermes": { level: "yes", note: "Always-on with cron and learning loop.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/cron" },
+      "Blue Phone": { level: "yes", note: "Background agents and triage.", source: "https://heyblue.com/" }
     }
   },
   {
     name: "Email",
     icon: "✉️",
     status: {
-      "ChatGPT Dots": { level: "partial", note: "Connectors + cloud computer." },
-      "Claude Duet": { level: "partial", note: "Gmail connectors; drafts." },
-      "GrokBot": { level: "yes", note: "Own address + connectors." },
-      "Muse": { level: "partial", note: "Connectors + browser." },
-      "Gemini Spark": { level: "yes", note: "Deep Gmail integration." },
-      "OpenClaw": { level: "partial", note: "Depends on skills." },
-      "Hermes": { level: "partial", note: "Email channel + skills." },
-      "Blue Phone": { level: "yes", note: "Full triage and replies." }
+      "ChatGPT Dots": { level: "partial", note: "Connectors + cloud computer.", source: "https://learn.chatgpt.com/docs/dots/computers-and-apps" },
+      "Claude Duet": { level: "partial", note: "Gmail connectors; drafts.", source: "https://support.claude.com/en/articles/17631495-get-started-with-claude-duet" },
+      "GrokBot": { level: "yes", note: "Own address + connectors.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
+      "Muse": { level: "partial", note: "Connectors + browser.", source: "https://muse.ai/" },
+      "Gemini Spark": { level: "yes", note: "Deep Gmail integration.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "partial", note: "Depends on skills.", source: "https://openclaw.ai/" },
+      "Hermes": { level: "partial", note: "Email channel + skills.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/email" },
+      "Blue Phone": { level: "yes", note: "Full triage and replies.", source: "https://heyblue.com/" }
     }
   },
   {
@@ -308,9 +375,9 @@ const capabilities = [
       "GrokBot": { level: "partial", note: "Limited phone app access." },
       "Muse": { level: "no" },
       "Gemini Spark": { level: "no" },
-      "OpenClaw": { level: "yes", note: "iMessage, WhatsApp, Signal, Telegram, etc." },
-      "Hermes": { level: "yes", note: "Telegram, WhatsApp, Signal, Slack, and more." },
-      "Blue Phone": { level: "yes", note: "Full Messages access." }
+      "OpenClaw": { level: "yes", note: "iMessage, WhatsApp, Signal, Telegram, etc.", source: "https://openclaw.ai/" },
+      "Hermes": { level: "yes", note: "Telegram, WhatsApp, Signal, Slack, and more.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging" },
+      "Blue Phone": { level: "yes", note: "Full Messages access.", source: "https://heyblue.com/privacy" }
     }
   },
   {
@@ -328,12 +395,11 @@ const capabilities = [
       "Muse": {
         level: "partial",
         note: "Paid US subscribers can have Muse place calls to US businesses (reservations, insurance, cable, DMV, and similar). Rolled out Nov 12, 2026 after a limited early-adopter test.",
-        source: "https://x.com/alexandr_wang/status/2120930586827391350",
         improved: "Nov 12, 2026"
       },
       "Gemini Spark": { level: "no" },
-      "OpenClaw": { level: "partial", note: "Possible via skills." },
-      "Hermes": { level: "partial", note: "Possible via skills/integrations." },
+      "OpenClaw": { level: "partial", note: "Possible via skills.", source: "https://docs.openclaw.ai/plugins/voice-call/configuration" },
+      "Hermes": { level: "partial", note: "Possible via skills/integrations.", source: "https://hermes-agent.nousresearch.com/marketplace/hermes-phone" },
       "Blue Phone": { level: "coming", note: "Call features listed as coming soon." }
     }
   },
@@ -343,26 +409,26 @@ const capabilities = [
     status: {
       "ChatGPT Dots": { level: "no" },
       "Claude Duet": { level: "no" },
-      "GrokBot": { level: "yes", note: "Location via phone apps." },
+      "GrokBot": { level: "yes", note: "Location via phone apps.", source: "https://docs.x.ai/grok-bot/mobile" },
       "Muse": { level: "no" },
-      "Gemini Spark": { level: "partial", note: "Maps / Workspace." },
-      "OpenClaw": { level: "partial", note: "If granted locally." },
-      "Hermes": { level: "partial", note: "If granted locally." },
-      "Blue Phone": { level: "yes", note: "Device-level location." }
+      "Gemini Spark": { level: "partial", note: "Maps / Workspace.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "partial", note: "If granted locally.", source: "https://docs.openclaw.ai/nodes/location-command" },
+      "Hermes": { level: "partial", note: "If granted locally.", source: "https://hermes-agent.nousresearch.com/marketplace/hermes-android" },
+      "Blue Phone": { level: "yes", note: "Device-level location.", source: "https://heyblue.com/privacy" }
     }
   },
   {
     name: "Payments",
     icon: "💳",
     status: {
-      "ChatGPT Dots": { level: "partial", note: "Approval required." },
-      "Claude Duet": { level: "partial", note: "Link / Shop Pay; asks first." },
-      "GrokBot": { level: "partial", note: "Saved cards; approval." },
-      "Muse": { level: "partial", note: "Stripe Link; approval." },
-      "Gemini Spark": { level: "partial", note: "Asks before purchases." },
-      "OpenClaw": { level: "partial", note: "Depends on setup." },
-      "Hermes": { level: "partial", note: "Depends on skills." },
-      "Blue Phone": { level: "yes", note: "Can spend via apps." }
+      "ChatGPT Dots": { level: "partial", note: "Approval required.", source: "https://help.openai.com/en/articles/20001529-dots-privacy-security-and-safety-faqs" },
+      "Claude Duet": { level: "partial", note: "Link / Shop Pay; asks first.", source: "https://support.claude.com/en/articles/17631495-get-started-with-claude-duet" },
+      "GrokBot": { level: "partial", note: "Saved cards; approval.", source: "https://docs.x.ai/grok-bot/vault" },
+      "Muse": { level: "partial", note: "Stripe Link; approval.", source: "https://muse.ai/security-and-privacy" },
+      "Gemini Spark": { level: "partial", note: "Asks before purchases.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "partial", note: "Depends on setup.", source: "https://docs.openclaw.ai/plugins/plugin-permission-requests" },
+      "Hermes": { level: "partial", note: "Depends on skills.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/credential-vault" },
+      "Blue Phone": { level: "yes", note: "Can spend via apps.", source: "https://heyblue.com/privacy-security" }
     }
   },
   {
@@ -388,14 +454,14 @@ const capabilities = [
     name: "Shopping / orders",
     icon: "🛒",
     status: {
-      "ChatGPT Dots": { level: "partial", note: "Browser + approval." },
-      "Claude Duet": { level: "partial", note: "Browser or Shop Pay." },
-      "GrokBot": { level: "partial", note: "Browser computer-use." },
-      "Muse": { level: "partial", note: "Browser + Stripe." },
-      "Gemini Spark": { level: "partial", note: "Browser with approval." },
-      "OpenClaw": { level: "partial", note: "Browser or skills." },
-      "Hermes": { level: "partial", note: "Browser or skills." },
-      "Blue Phone": { level: "yes", note: "Demonstrated Amazon and other apps." }
+      "ChatGPT Dots": { level: "partial", note: "Browser + approval.", source: "https://help.openai.com/en/articles/20001529-dots-privacy-security-and-safety-faqs" },
+      "Claude Duet": { level: "partial", note: "Browser or Shop Pay.", source: "https://support.claude.com/en/articles/17666489-how-to-use-shop-pay-with-claude-duet" },
+      "GrokBot": { level: "partial", note: "Browser computer-use.", source: "https://docs.x.ai/grok-bot/how-grok-bot-works" },
+      "Muse": { level: "partial", note: "Browser + Stripe.", source: "https://muse.ai/blog/how-we-designed-muse" },
+      "Gemini Spark": { level: "partial", note: "Browser with approval.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "partial", note: "Browser or skills.", source: "https://docs.openclaw.ai/tools/browser/agent-tools" },
+      "Hermes": { level: "partial", note: "Browser or skills.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/browser" },
+      "Blue Phone": { level: "yes", note: "Demonstrated Amazon and other apps.", source: "https://heyblue.com/privacy-security" }
     }
   },
   {
@@ -404,11 +470,11 @@ const capabilities = [
     status: {
       "ChatGPT Dots": { level: "unknown" },
       "Claude Duet": { level: "unknown" },
-      "GrokBot": { level: "partial", note: "Multiple bots share computer; handoff." },
+      "GrokBot": { level: "partial", note: "Multiple bots share computer; handoff.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
       "Muse": { level: "unknown" },
       "Gemini Spark": { level: "unknown" },
-      "OpenClaw": { level: "partial", note: "Shared sessions." },
-      "Hermes": { level: "partial", note: "Bot Mode and group chats." },
+      "OpenClaw": { level: "partial", note: "Shared sessions.", source: "https://docs.openclaw.ai/concepts/multi-user" },
+      "Hermes": { level: "partial", note: "Bot Mode and group chats.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/bot-mode" },
       "Blue Phone": { level: "unknown" }
     }
   },
@@ -421,8 +487,8 @@ const capabilities = [
       "GrokBot": { level: "no" },
       "Muse": { level: "no" },
       "Gemini Spark": { level: "no" },
-      "OpenClaw": { level: "yes", note: "Open source, local-first, model-agnostic." },
-      "Hermes": { level: "yes", note: "MIT open source, model-agnostic, self-improving." },
+      "OpenClaw": { level: "yes", note: "Open source, local-first, model-agnostic.", source: "https://openclaw.ai/" },
+      "Hermes": { level: "yes", note: "MIT open source, model-agnostic, self-improving.", source: "https://hermes-agent.nousresearch.com/open-source-ai-agent" },
       "Blue Phone": { level: "no" }
     }
   },
@@ -430,77 +496,129 @@ const capabilities = [
     name: "Files & storage",
     icon: "📁",
     status: {
-      "ChatGPT Dots": { level: "yes", note: "Own cloud files + drives." },
-      "Claude Duet": { level: "yes", note: "Cloud files + connectors." },
-      "GrokBot": { level: "yes", note: "Shared cloud filesystem." },
-      "Muse": { level: "yes", note: "VM filesystem." },
-      "Gemini Spark": { level: "yes", note: "Drive + local." },
-      "OpenClaw": { level: "yes", note: "Full local filesystem." },
-      "Hermes": { level: "yes", note: "Full local or VPS files." },
-      "Blue Phone": { level: "partial", note: "Device files + cloud." }
+      "ChatGPT Dots": { level: "yes", note: "Own cloud files + drives.", source: "https://learn.chatgpt.com/docs/dots/computers-and-apps" },
+      "Claude Duet": { level: "yes", note: "Cloud files + connectors.", source: "https://support.claude.com/en/articles/17631495-get-started-with-claude-duet" },
+      "GrokBot": { level: "yes", note: "Shared cloud filesystem.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
+      "Muse": { level: "yes", note: "VM filesystem.", source: "https://muse.ai/blog/how-we-designed-muse" },
+      "Gemini Spark": { level: "yes", note: "Drive + local.", source: "https://blog.google/innovation-and-ai/products/gemini-app/gemini-spark-updates-june-2026/" },
+      "OpenClaw": { level: "yes", note: "Full local filesystem.", source: "https://openclaw.ai/" },
+      "Hermes": { level: "yes", note: "Full local or VPS files.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tools" },
+      "Blue Phone": { level: "partial", note: "Device files + cloud.", source: "https://heyblue.com/privacy" }
     }
   },
   {
     name: "Browser / any website",
     icon: "🌍",
     status: {
-      "ChatGPT Dots": { level: "yes", note: "Own cloud browser." },
-      "Claude Duet": { level: "yes", note: "Own cloud browser." },
-      "GrokBot": { level: "yes", note: "Persistent browser." },
-      "Muse": { level: "yes", note: "VM browser." },
-      "Gemini Spark": { level: "yes", note: "Cloud browser." },
-      "OpenClaw": { level: "yes", note: "Local browser control." },
-      "Hermes": { level: "yes", note: "Browser tools." },
-      "Blue Phone": { level: "yes", note: "Full app and browser control." }
+      "ChatGPT Dots": { level: "yes", note: "Own cloud browser.", source: "https://learn.chatgpt.com/docs/dots" },
+      "Claude Duet": { level: "yes", note: "Own cloud browser.", source: "https://claude.com/resources/articles/claude-duet-safety-privacy-and-security" },
+      "GrokBot": { level: "yes", note: "Persistent browser.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
+      "Muse": { level: "yes", note: "VM browser.", source: "https://muse.ai/" },
+      "Gemini Spark": { level: "yes", note: "Cloud browser.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "yes", note: "Local browser control.", source: "https://docs.openclaw.ai/tools/browser/agent-tools" },
+      "Hermes": { level: "yes", note: "Browser tools.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/browser" },
+      "Blue Phone": { level: "yes", note: "Full app and browser control.", source: "https://heyblue.com/privacy-security" }
     }
   },
   {
     name: "Camera & mic",
     icon: "📷",
     status: {
-      "ChatGPT Dots": { level: "partial", note: "Via connected devices or voice." },
-      "Claude Duet": { level: "partial", note: "Voice; limited screen." },
-      "GrokBot": { level: "partial", note: "Screen + voice notes." },
-      "Muse": { level: "partial", note: "Voice and some visual." },
-      "Gemini Spark": { level: "partial", note: "Voice and some visual." },
-      "OpenClaw": { level: "partial", note: "Depends on local permissions." },
-      "Hermes": { level: "partial", note: "Depends on local permissions." },
-      "Blue Phone": { level: "yes", note: "Full device hardware access." }
+      "ChatGPT Dots": { level: "partial", note: "Via connected devices or voice.", source: "https://help.openai.com/en/articles/20001529-dots-privacy-security-and-safety-faqs" },
+      "Claude Duet": { level: "partial", note: "Voice; limited screen.", source: "https://claude.com/resources/articles/claude-duet" },
+      "GrokBot": { level: "partial", note: "Screen + voice notes.", source: "https://docs.x.ai/grok-bot/overview" },
+      "Muse": { level: "partial", note: "Voice and some visual.", source: "https://muse.ai/privacy" },
+      "Gemini Spark": { level: "partial", note: "Voice and some visual.", source: "https://blog.google/innovation-and-ai/products/gemini-app/productivity-features-gemini-live/" },
+      "OpenClaw": { level: "partial", note: "Depends on local permissions.", source: "https://docs.openclaw.ai/concepts/features" },
+      "Hermes": { level: "partial", note: "Depends on local permissions.", source: "https://hermes-agent.nousresearch.com/marketplace/hermes-android" },
+      "Blue Phone": { level: "yes", note: "Full device hardware access.", source: "https://heyblue.com/privacy" }
     }
   },
   {
     name: "Health & finance apps",
     icon: "❤️",
     status: {
-      "ChatGPT Dots": { level: "partial", note: "Via connectors or browser." },
-      "Claude Duet": { level: "partial", note: "Connectors (QuickBooks, Stripe)." },
-      "GrokBot": { level: "partial", note: "Browser + connectors." },
-      "Muse": { level: "partial", note: "Connectors + browser." },
-      "Gemini Spark": { level: "partial", note: "Workspace + browser." },
-      "OpenClaw": { level: "partial", note: "Depends on user setup." },
-      "Hermes": { level: "partial", note: "Depends on skills and setup." },
-      "Blue Phone": { level: "partial", note: "Can use any installed app." }
+      "ChatGPT Dots": { level: "partial", note: "Via connectors or browser.", source: "https://learn.chatgpt.com/docs/dots/computers-and-apps" },
+      "Claude Duet": { level: "partial", note: "Connectors (QuickBooks, Stripe).", source: "https://claude.com/resources/articles/claude-duet" },
+      "GrokBot": { level: "partial", note: "Browser + connectors.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
+      "Muse": { level: "partial", note: "Connectors + browser.", source: "https://muse.ai/business" },
+      "Gemini Spark": { level: "partial", note: "Workspace + browser.", source: "https://support.google.com/gemini/answer/17094507" },
+      "OpenClaw": { level: "partial", note: "Depends on user setup.", source: "https://docs.openclaw.ai/nodes/command-policy" },
+      "Hermes": { level: "partial", note: "Depends on skills and setup.", source: "https://hermes-agent.nousresearch.com/marketplace/hermes-android" },
+      "Blue Phone": { level: "partial", note: "Can use any installed app.", source: "https://heyblue.com/" }
     }
   },
   {
     name: "Proactive judgment",
     icon: "💡",
     status: {
-      "ChatGPT Dots": { level: "yes", note: "Proactive research and goals." },
-      "Claude Duet": { level: "yes", note: "Morning brief and prioritization." },
-      "GrokBot": { level: "yes", note: "Routines and proactive checks." },
-      "Muse": { level: "yes", note: "Goal-oriented proactive work." },
-      "Gemini Spark": { level: "yes", note: "Proactive Workspace help." },
-      "OpenClaw": { level: "partial", note: "Depends on user skills." },
-      "Hermes": { level: "yes", note: "Self-improving learning loop." },
-      "Blue Phone": { level: "yes", note: "Notification triage and handling." }
+      "ChatGPT Dots": { level: "yes", note: "Proactive research and goals.", source: "https://openai.com/index/introducing-dots/" },
+      "Claude Duet": { level: "yes", note: "Morning brief and prioritization.", source: "https://support.claude.com/en/articles/17631495-get-started-with-claude-duet" },
+      "GrokBot": { level: "yes", note: "Routines and proactive checks.", source: "https://docs.x.ai/grok-bot/overview" },
+      "Muse": { level: "yes", note: "Goal-oriented proactive work.", source: "https://muse.ai/blog/how-we-designed-muse" },
+      "Gemini Spark": { level: "yes", note: "Proactive Workspace help.", source: "https://blog.google/innovation-and-ai/products/gemini-app/next-evolution-gemini-app/" },
+      "OpenClaw": { level: "partial", note: "Depends on user skills.", source: "https://docs.openclaw.ai/cron-vs-heartbeat" },
+      "Hermes": { level: "yes", note: "Self-improving learning loop.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/skills" },
+      "Blue Phone": { level: "yes", note: "Notification triage and handling.", source: "https://heyblue.com/" }
     }
   }
 ];
 
+function sourceHref(url) {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") return parsed.href;
+  } catch (e) {}
+  return "";
+}
+
 function render() {
   const tbody = document.getElementById("tbody");
   tbody.innerHTML = "";
+  const openCells = [];
+
+  function hide(cell, force) {
+    if (!force && cell._btn.dataset.pinned === "1") return;
+    clearTimeout(cell._hideTimer);
+    delete cell._btn.dataset.pinned;
+    cell._btn.setAttribute("aria-expanded", "false");
+    cell._pop.hidden = true;
+  }
+
+  function place(cell) {
+    const pop = cell._pop;
+    const rect = cell._btn.getBoundingClientRect();
+    const margin = 8;
+    const width = Math.min(300, window.innerWidth - margin * 2);
+    pop.style.width = width + "px";
+    pop.hidden = false;
+    const height = pop.offsetHeight;
+    let left = rect.left + rect.width / 2 - width / 2;
+    left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
+    let top = rect.bottom + 10;
+    if (top + height > window.innerHeight - margin) {
+      const above = rect.top - height - 10;
+      if (above >= margin) top = above;
+    }
+    pop.style.left = left + "px";
+    pop.style.top = Math.max(margin, top) + "px";
+  }
+
+  function show(cell, pin) {
+    openCells.forEach(other => {
+      if (other !== cell) hide(other, true);
+    });
+    clearTimeout(cell._hideTimer);
+    if (pin) cell._btn.dataset.pinned = "1";
+    cell._btn.setAttribute("aria-expanded", "true");
+    place(cell);
+  }
+
+  function scheduleHide(cell) {
+    clearTimeout(cell._hideTimer);
+    cell._hideTimer = setTimeout(() => hide(cell, false), 350);
+  }
+
   capabilities.forEach(cap => {
     const tr = document.createElement("tr");
     const nameTd = document.createElement("td");
@@ -518,24 +636,101 @@ function render() {
     agents.forEach(agent => {
       const td = document.createElement("td");
       const s = cap.status[agent] || { level: "unknown" };
-      const span = document.createElement(s.source ? "a" : "span");
-      span.className = "status " + s.level + (s.improved ? " just-added" : "");
-      span.textContent = s.level === "yes" ? "Yes" : s.level === "partial" ? "Partial" : s.level === "coming" ? "Soon" : s.level === "no" ? "No" : "?";
-      const titleParts = [];
-      if (s.note) titleParts.push(s.note);
-      if (s.improved) titleParts.push("Just Added on " + s.improved + "!");
-      if (s.source) titleParts.push("Source: " + s.source);
-      if (titleParts.length) span.title = titleParts.join(" · ");
-      if (s.source) {
-        span.href = s.source;
-        span.target = "_blank";
-        span.rel = "noopener noreferrer";
+      const label = s.level === "yes" ? "Yes" : s.level === "partial" ? "Partial" : s.level === "coming" ? "Soon" : s.level === "no" ? "No" : "?";
+      const href = sourceHref(s.source);
+      const hasDetail = Boolean(s.note || s.improved || href);
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "status " + s.level + (s.improved ? " just-added" : "") + (hasDetail ? " has-detail" : "");
+      btn.textContent = label;
+      td.appendChild(btn);
+
+      if (hasDetail) {
+        const pop = document.createElement("div");
+        pop.className = "popover";
+        pop.hidden = true;
+        pop.setAttribute("role", "dialog");
+        const popId = "pop-" + openCells.length;
+        pop.id = popId;
+        btn.setAttribute("aria-describedby", popId);
+        btn.setAttribute("aria-haspopup", "dialog");
+        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-label", cap.name + ", " + agent + ", " + label);
+
+        if (s.note) {
+          const note = document.createElement("p");
+          note.className = "note";
+          note.textContent = s.note;
+          pop.appendChild(note);
+        }
+        if (s.improved) {
+          const added = document.createElement("p");
+          added.className = "added";
+          added.textContent = "Just Added on " + s.improved + "!";
+          pop.appendChild(added);
+        }
+        if (href) {
+          const link = document.createElement("a");
+          link.className = "source";
+          link.href = href;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          const host = new URL(href).hostname.replace(/^www\./, "");
+          link.textContent = "Source: " + host;
+          link.addEventListener("click", (event) => event.stopPropagation());
+          pop.appendChild(link);
+        }
+        document.body.appendChild(pop);
+
+        const cell = { _btn: btn, _pop: pop, _hideTimer: 0 };
+        openCells.push(cell);
+
+        btn.addEventListener("pointerenter", (event) => {
+          if (event.pointerType !== "mouse") return;
+          show(cell, false);
+        });
+        btn.addEventListener("pointerleave", (event) => {
+          if (event.pointerType !== "mouse") return;
+          if (event.relatedTarget && pop.contains(event.relatedTarget)) return;
+          scheduleHide(cell);
+        });
+        pop.addEventListener("pointerenter", (event) => {
+          if (event.pointerType !== "mouse") return;
+          clearTimeout(cell._hideTimer);
+        });
+        pop.addEventListener("pointerleave", (event) => {
+          if (event.pointerType !== "mouse") return;
+          if (event.relatedTarget && btn.contains(event.relatedTarget)) return;
+          scheduleHide(cell);
+        });
+        btn.addEventListener("click", (event) => {
+          event.stopPropagation();
+          if (btn.dataset.pinned === "1") hide(cell, true);
+          else show(cell, true);
+        });
       }
-      td.appendChild(span);
+
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
   });
+
+  document.addEventListener("click", (event) => {
+    openCells.forEach(cell => {
+      if (cell._btn.contains(event.target) || cell._pop.contains(event.target)) return;
+      hide(cell, true);
+    });
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") openCells.forEach(cell => hide(cell, true));
+  });
+  const reposition = () => {
+    openCells.forEach(cell => {
+      if (!cell._pop.hidden) place(cell);
+    });
+  };
+  window.addEventListener("resize", reposition);
+  window.addEventListener("scroll", reposition, true);
 }
 render();
 
