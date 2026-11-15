@@ -359,7 +359,12 @@ const capabilities = [
       "ChatGPT Dots": { level: "partial", note: "Connectors + cloud computer.", source: "https://learn.chatgpt.com/docs/dots/computers-and-apps" },
       "Claude Duet": { level: "partial", note: "Gmail connectors; drafts.", source: "https://support.claude.com/en/articles/17631495-get-started-with-claude-duet" },
       "GrokBot": { level: "yes", note: "Own address + connectors.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
-      "Muse": { level: "partial", note: "Connectors + browser.", source: "https://muse.ai/" },
+      "Muse": {
+        level: "yes",
+        note: "Muse Mail: your Muse can have its own @muse.ai address to send, receive, and follow up on email (sends need your approval), alongside Gmail/Outlook connectors. Rolling out to paid subscribers in the US and Canada from Nov 10, 2026.",
+        source: "https://www.meta.com/help/superintelligence/1149305437517250/",
+        improved: "Nov 10, 2026"
+      },
       "Gemini Spark": { level: "yes", note: "Deep Gmail integration.", source: "https://support.google.com/gemini/answer/17094507" },
       "OpenClaw": { level: "partial", note: "Depends on skills.", source: "https://openclaw.ai/" },
       "Hermes": { level: "partial", note: "Email channel + skills.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/email" },
@@ -389,8 +394,7 @@ const capabilities = [
       "GrokBot": {
         level: "partial",
         note: "Can call US businesses or people who have consented, on your behalf. You approve each call, can take over or answer mid-call questions, and can review the transcript and recording afterward. US only, from the desktop and phone apps. Announced Nov 4, 2026.",
-        source: "https://docs.x.ai/grok-bot/chat-and-collaboration",
-        improved: "Nov 4, 2026"
+        source: "https://docs.x.ai/grok-bot/chat-and-collaboration"
       },
       "Muse": {
         level: "partial",
