@@ -319,8 +319,18 @@ const capabilities = [
     status: {
       "ChatGPT Dots": { level: "no" },
       "Claude Duet": { level: "no" },
-      "GrokBot": { level: "no" },
-      "Muse": { level: "no" },
+      "GrokBot": {
+        level: "partial",
+        note: "Can call US businesses or people who have consented, on your behalf. You approve each call, can take over or answer mid-call questions, and can review the transcript and recording afterward. US only, from the desktop and phone apps. Announced Nov 4, 2026.",
+        source: "https://docs.x.ai/grok-bot/chat-and-collaboration",
+        improved: "Nov 4, 2026"
+      },
+      "Muse": {
+        level: "partial",
+        note: "Paid US subscribers can have Muse place calls to US businesses (reservations, insurance, cable, DMV, and similar). Rolled out Nov 12, 2026 after a limited early-adopter test.",
+        source: "https://x.com/alexandr_wang/status/2120930586827391350",
+        improved: "Nov 12, 2026"
+      },
       "Gemini Spark": { level: "no" },
       "OpenClaw": { level: "partial", note: "Possible via skills." },
       "Hermes": { level: "partial", note: "Possible via skills/integrations." },
