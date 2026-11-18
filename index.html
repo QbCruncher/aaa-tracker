@@ -220,7 +220,7 @@
 <header>
   <h1>AI Agent Avalanche (AAA)</h1>
   <p class="subtitle">AI agents are racing to become the same product: a personal assistant that can run your entire digital life. This tracker shows how close each one is right now.</p>
-  <div class="update-note">Last updated: Nov 17, 2026 · Green = fully available</div>
+  <div class="update-note">Last updated: Nov 18, 2026 · Green = fully available</div>
 </header>
 
 <div class="container">
@@ -269,7 +269,7 @@
         <tbody id="tbody"></tbody>
       </table>
     </div>
-    <p style="font-size:0.8rem; color:var(--muted); margin-top:0.75rem;">Hover a colored cell to read its note. Tap the cell to keep the note open, including on a phone, and tap outside it to dismiss it. Green and yellow cells include a link to an official source. Cells with a green glow and “NEW” badge improved recently (red→yellow, red→green, or yellow→green). Statuses as of Nov 17, 2026. Edit the data object in this file to turn cells green as features ship.</p>
+    <p style="font-size:0.8rem; color:var(--muted); margin-top:0.75rem;">Hover a colored cell to read its note. Tap the cell to keep the note open, including on a phone, and tap outside it to dismiss it. Green and yellow cells include a link to an official source. Cells with a green glow and “NEW” badge improved recently (red→yellow, red→green, or yellow→green). Statuses as of Nov 18, 2026. Edit the data object in this file to turn cells green as features ship.</p>
   </div>
 </div>
 
@@ -349,7 +349,7 @@ const capabilities = [
       "Gemini Spark": { level: "yes", note: "24/7 background tasks.", source: "https://blog.google/innovation-and-ai/products/gemini-app/next-evolution-gemini-app/" },
       "OpenClaw": { level: "yes", note: "Heartbeat and scheduled jobs.", source: "https://docs.openclaw.ai/cron-vs-heartbeat" },
       "Hermes": { level: "yes", note: "Always-on with cron and learning loop.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/cron" },
-      "Blue Phone": { level: "yes", note: "Background agents and triage.", source: "https://heyblue.com/" }
+      "Blue Phone": { level: "yes", note: "Background agents and time-based automations; notification triage listed as coming soon.", source: "https://heyblue.com/" }
     }
   },
   {
@@ -362,13 +362,12 @@ const capabilities = [
       "Muse": {
         level: "yes",
         note: "Muse Mail: your Muse can have its own @muse.ai address to send, receive, and follow up on email (sends need your approval), alongside Gmail/Outlook connectors. Rolling out to paid subscribers in the US and Canada from Nov 10, 2026.",
-        source: "https://www.meta.com/help/superintelligence/1149305437517250/",
-        improved: "Nov 10, 2026"
+        source: "https://www.meta.com/help/superintelligence/1149305437517250/"
       },
       "Gemini Spark": { level: "yes", note: "Deep Gmail integration.", source: "https://support.google.com/gemini/answer/17094507" },
       "OpenClaw": { level: "partial", note: "Depends on skills.", source: "https://openclaw.ai/" },
       "Hermes": { level: "partial", note: "Email channel + skills.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/messaging/email" },
-      "Blue Phone": { level: "yes", note: "Full triage and replies.", source: "https://heyblue.com/" }
+      "Blue Phone": { level: "partial", note: "Can work in your mail apps; automatic notification and email triage is listed as coming soon in the beta.", source: "https://heyblue.com/" }
     }
   },
   {
@@ -401,7 +400,12 @@ const capabilities = [
         note: "Paid US subscribers can have Muse place calls to US businesses (reservations, insurance, cable, DMV, and similar). Rolled out Nov 12, 2026 after a limited early-adopter test.",
         improved: "Nov 12, 2026"
       },
-      "Gemini Spark": { level: "no" },
+      "Gemini Spark": {
+        level: "partial",
+        note: "Tasks in Gemini (formerly Spark) can call businesses for you, e.g. to book appointments or check prices and inventory, and discloses it is an AI. US only, and not yet available in Indiana, Louisiana, Minnesota, Montana, or Nebraska. Launched Nov 17, 2026.",
+        source: "https://blog.google/innovation-and-ai/products/gemini-app/tasks-in-gemini-free-new-features/",
+        improved: "Nov 17, 2026"
+      },
       "OpenClaw": { level: "partial", note: "Possible via skills.", source: "https://docs.openclaw.ai/plugins/voice-call/configuration" },
       "Hermes": { level: "partial", note: "Possible via skills/integrations.", source: "https://hermes-agent.nousresearch.com/marketplace/hermes-phone" },
       "Blue Phone": { level: "coming", note: "Call features listed as coming soon." }
@@ -448,7 +452,12 @@ const capabilities = [
       "Claude Duet": { level: "unknown" },
       "GrokBot": { level: "unknown" },
       "Muse": { level: "unknown" },
-      "Gemini Spark": { level: "unknown" },
+      "Gemini Spark": {
+        level: "partial",
+        note: "Google Pay checkout via the Agent Payments Protocol (AP2) with tokenized Mastercard and Visa cards (Amex coming soon). Set a hard spending cap upfront; Gemini asks for confirmation or pre-approval before buying. Rewards and purchase protections kept, receipts land in Google Wallet. US first, launched Nov 17, 2026.",
+        source: "https://blog.google/innovation-and-ai/products/gemini-app/tasks-in-gemini-free-new-features/",
+        improved: "Nov 17, 2026"
+      },
       "OpenClaw": { level: "unknown" },
       "Hermes": { level: "unknown" },
       "Blue Phone": { level: "unknown" }
