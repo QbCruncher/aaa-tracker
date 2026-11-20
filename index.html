@@ -220,7 +220,7 @@
 <header>
   <h1>AI Agent Avalanche (AAA)</h1>
   <p class="subtitle">AI agents are racing to become the same product: a personal assistant that can run your entire digital life. This tracker shows how close each one is right now.</p>
-  <div class="update-note">Last updated: Nov 19, 2026 · Green = fully available</div>
+  <div class="update-note">Last updated: Nov 20, 2026 · Green = fully available</div>
 </header>
 
 <div class="container">
@@ -269,7 +269,7 @@
         <tbody id="tbody"></tbody>
       </table>
     </div>
-    <p style="font-size:0.8rem; color:var(--muted); margin-top:0.75rem;">Hover a colored cell to read its note. Tap the cell to keep the note open, including on a phone, and tap outside it to dismiss it. Green and yellow cells include a link to an official source. Cells with a green glow and “NEW” badge improved recently (red→yellow, red→green, or yellow→green). Statuses as of Nov 19, 2026. Edit the data object in this file to turn cells green as features ship.</p>
+    <p style="font-size:0.8rem; color:var(--muted); margin-top:0.75rem;">Hover a colored cell to read its note. Tap the cell to keep the note open, including on a phone, and tap outside it to dismiss it. Green and yellow cells include a link to an official source. Cells with a green glow and “NEW” badge improved recently (red→yellow, red→green, or yellow→green). Statuses as of Nov 20, 2026. Edit the data object in this file to turn cells green as features ship.</p>
   </div>
 </div>
 
@@ -304,7 +304,7 @@ const capabilities = [
       "Claude Duet": { level: "yes", note: "Own cloud VM with browser.", source: "https://claude.com/resources/articles/claude-duet-safety-privacy-and-security" },
       "GrokBot": { level: "yes", note: "Persistent shared cloud computer.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
       "Muse": { level: "yes", note: "Dedicated Secure VM.", source: "https://muse.ai/security-and-privacy" },
-      "Gemini Spark": { level: "yes", note: "Cloud computer + local files.", source: "https://support.google.com/gemini/answer/17094507" },
+      "Gemini Spark": { level: "yes", note: "Cloud computer + local files. On Mac, computer use can now click, type, and work across permitted desktop apps in a background window (US, Google AI Plus/Pro/Ultra, from Nov 19, 2026).", source: "https://support.google.com/gemini/answer/18956635" },
       "OpenClaw": { level: "yes", note: "Full local machine.", source: "https://openclaw.ai/" },
       "Hermes": { level: "yes", note: "Full local or VPS control.", source: "https://hermes-agent.nousresearch.com/docs/user-guide/features/tools" },
       "Blue Phone": { level: "partial", note: "Primarily phone; desktop coming.", source: "https://heyblue.com/" }
@@ -446,8 +446,7 @@ const capabilities = [
       "ChatGPT Dots": {
         level: "partial",
         note: "ChatGPT Wallet (Nov 13, 2026): pays with a network token from Amex, Mastercard, or Visa, not the real card. Every purchase needs user review plus Face ID or fingerprint. Rewards and eligible dispute protections kept. Rolling out through dots to Pro subscribers 18+ in the US with eligible US-issued cards. Delegated spend limits are a future direction.",
-        source: "https://openai.com/index/introducing-chatgpt-wallet/",
-        improved: "Nov 13, 2026"
+        source: "https://openai.com/index/introducing-chatgpt-wallet/"
       },
       "Claude Duet": { level: "unknown" },
       "GrokBot": { level: "unknown" },
@@ -537,7 +536,7 @@ const capabilities = [
     name: "Health & finance apps",
     icon: "❤️",
     status: {
-      "ChatGPT Dots": { level: "partial", note: "Via connectors or browser.", source: "https://learn.chatgpt.com/docs/dots/computers-and-apps" },
+      "ChatGPT Dots": { level: "partial", note: "Via connectors or browser. ChatGPT Health (incl. Android Health Connect) now works in dots with proactive health suggestions, rolling out in the US from Nov 19, 2026; finance still via connectors.", source: "https://help.openai.com/en/articles/6825453-chatgpt-release-notes" },
       "Claude Duet": { level: "partial", note: "Connectors (QuickBooks, Stripe).", source: "https://claude.com/resources/articles/claude-duet" },
       "GrokBot": { level: "partial", note: "Browser + connectors.", source: "https://docs.x.ai/grok-bot/computer-and-apps" },
       "Muse": { level: "partial", note: "Connectors + browser.", source: "https://muse.ai/business" },
